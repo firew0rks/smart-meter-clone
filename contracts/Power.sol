@@ -1,91 +1,62 @@
 pragma solidity ^0.4.18;
 
 contract Power{
-    // Define variables
-    // list of people taking part
-    // struct for each person containing their address, how much money they have left, how much money they are generating, history of transactions
-    // Surge charge
-    address[] members;
-    bool transfer_success = false;
-    uint energy_received = 100; //watts
-    //bool isEqual = (1 == 1 seconds);
-    //bool isEqual = (1 minutes == 60 seconds);
-    //bool isEqual = (1 hours == 60 minutes);
-    //bool isEqual = (1 days == 24 hours);
-    //bool isEqual = (1 years = 365 days);
 
-    struct Person{
-      address user_address;
-      uint tokens_left;
-      uint energy_received; //(Come back after backend completed)
-    }
-
+    uint energy_generated = 100; //(watts) hard coded amount of electricity generated
     uint baserate;
     uint peakrate;
+    uint energy_threshold = 10; // energy prodcued over 10 watts/hr generated --> sell energy
+    address consumer_addr;
+    address prosumer_addr;
 
+    struct Consumer{
+      uint token_balance;
+      uint energy_balance;
+    }
+
+    struct Prosumer{
+      uint token_balance;
+      uint energy_produced;
+    }
+
+//
+    mapping (address => Consumer) consumer_list;
+    mapping (address => Prosumer) prosumer_list;
+
+    //  HARD CODED CONSUMER AND prosumerS - perhaps what we could do, is find all the people who are producing excess energy, (check if they want to sell) and exchange it with people who are not producing excess energ
+    // ADD EXTRA VARIABLE FOR ENERGY GENERATED
     function Power() public {
       baserate = 15; //15 cent on base/watt
       peakrate = 50; //50 cent on peak/watt
+      consumer_addr = msg.sender; // we are the consumer
+      prosumer_addr = 0xf17f52151EbEF6C7334FAD080c5704D77216b732;
+      consumer_list[consumer_addr].token_balance = msg.sender.balance;
+      prosumer_list[prosumer_addr].energy_produced = energy_generated;
+      consumer_list[consumer_addr].energy_balance = prosumer_list[prosumer_addr].energy_produced;     // THis should be defined AFTER they buy energy
+      prosumer_list[prosumer_addr].token_balance = prosumer_addr.balance;
     }
 
-    // Function: amount of tokens left
-    function Balance(address user_address) constant returns (uint){
-      return user_address.balance;
-    }
+    // Function: Transfers tokens from consumer to prosumer if the consumer has enough tokens. Transfer energy to prosumer.
+    function token_transfer(address consumer_addr, address prosumer_addr) public returns(bool){
+      uint cost = baserate * prosumer_list[prosumer_addr].energy_produced;
 
-    // Function: To check if consumer has enough tokens to buy energy
-    function CheckBalanceEnough(address consumer_address, address prosumer_address) public returns(bool){
-      uint cost = baserate * energy_received;
-      /* prosumer_cost = cost;
-      consumer_cost = -cost;  */
-      if (cost > Balance(consumer_address)){
-          return false;
+        // checks if there's enough tokens in wallet, and checks that producer is producing enough energy
+      if ((cost < consumer_addr.balance) && (prosumer_list[prosumer_addr].energy_produced > energy_threshold)){
+        prosumer_addr.transfer(cost);
+        consumer_list[consumer_addr].energy_balance += prosumer_list[prosumer_addr].energy_produced;
       } else {
-        prosumer_address.send(cost);
+        return false;
       }
     }
 
-    function ReceiveEnergy(address prosumer_address, uint energy_amount) returns(uint) {
-      uint energy = energy_received;
-      return energy;
+    // Function: Decrease amount of energy a consumer has as they use up energy. Return amount of electricity left.
+    function check_energy_left(address prosumer_addr, uint energy_used) public returns(uint) {
+        prosumer_list[prosumer_addr].energy_produced -= energy_used;
+
+        return prosumer_list[prosumer_addr].energy_produced ;
     }
 
 
-
-    /* function transfer_energy(address consumer_address, address prosumer_addres, uint energy_amount) {
-
-    } */
-
-
-
-
-
-    /* // Function: Set amount of tokens to pay
-    function SetToken(address user_address, uint offset) returns (uint){
-      offset = cost;
-      if
-    } */
-
-    // Function: Check if the token has been paid
-    /* function CheckPayment(address user_address, uint tokenamount) public returns(bool){
-      Person consumer = Person(user_address, user_address.balance);
-      if(consumer.send(tokenamount)){
-        transfer_success = true;
-      }
-      else {
-        transfer_success = false;
-      }
-      return transfer_success;
-    } */
-
-
-
-
-  // Function: escrow - once receipt is received for token payment, transfer energy
-
-
-  // Function: view historical data
-
-  // Function: automate the report of stats after 3 years
+    // Add received energy - how much the person has received by transferring the emoney
 
 }
