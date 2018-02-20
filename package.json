@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.2",
+    "forever": "^0.15.3",
+    "forever-monitor": "^1.7.1",
     "truffle-contract": "^3.0.3",
     "web3": "^0.20.5"
   }
