@@ -8,12 +8,11 @@ contract Power{
     uint energy_threshold = 10; // energy prodcued over 10 watts/hr generated --> sell energy
     address consumer_addr;
     address prosumer_addr;
-    uint energy_generated;
 
     struct User{
       uint token_balance;
       uint energy_balance;
-      uint total_useage;
+      /* uint total_useage; */
     }
 
     mapping (address => User) consumer_list;
@@ -26,10 +25,7 @@ contract Power{
       peakrate = 50; //50 cent on peak/watt
       energy_generated = 0;
       consumer_addr = msg.sender; // we are the consumer
-      prosumer_addr = 0xf17f52151EbEF6C7334FAD080c5704D77216b732;
       consumer_list[consumer_addr].token_balance = msg.sender.balance;
-      prosumer_list[prosumer_addr].energy_balance = energy_generated;
-      prosumer_list[prosumer_addr].token_balance = prosumer_addr.balance;
     }
 
     // Function: Transfers tokens from consumer to prosumer if the consumer has enough tokens. Transfer energy to prosumer.
@@ -52,20 +48,18 @@ contract Power{
     }
 
 
-    // Function: Decrease amount of energy a consumer has as they use up energy. Return amount of electricity left.
+    /* // Function: Decrease amount of energy a consumer has as they use up energy. Return amount of electricity left.
     function check_energy_left(address prosumer_addr, uint energy_used) public returns(uint) {
         prosumer_list[prosumer_addr].energy_produced -= energy_used;
 
         return prosumer_list[prosumer_addr].energy_produced ;
-    }
-
-
-    // Add received energy - how much the person has received by transferring the emoney
-
-    // Set generated electricity by the prosumer
+    } */
 
     // Set prosumer address
-
+    function set_prosumer(address prosumer_addr, uint energy_generated) public returns (address){
+      prosumer_list[prosumer_addr].token_balance = prosumer_addr.balance();
+      prosumer_list[prosumer_addr].energy_balance = energy_generated;
+    }
     // Set rate charged (demand dependant)
 
 
