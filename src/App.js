@@ -33,3 +33,5 @@ function instantiateContract() {
 }
 
 instantiateContract();
+
+console.log("Now attempting to update the value");
