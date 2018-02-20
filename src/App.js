@@ -13,13 +13,13 @@ const contract = require("truffle-contract");
 const PowerContract = require("../build/contracts/Power.json");
 
 // web3 instance using the ganache testnet as the provider
-web3 = new Web3(new Web3.providers.HttpProvider("HTTP://127.0.0.1:7545"));
+var provider = new Web3.providers.HttpProvider("http://127.0.0.1:9545");
 
 // instantiate the contract from the JSON - create instance
 
 function instantiateContract() {
     const powerContract = contract(PowerContract);
-    powerContract.setProvider(web3);
+    powerContract.setProvider(provider);
 
 // promise the deployed contract and use its info
     powerContract.deployed().then(instance => {
