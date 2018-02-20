@@ -16,6 +16,7 @@ const PowerContract = require("../build/contracts/Power.json");
 var provider = new Web3.providers.HttpProvider("http://127.0.0.1:7545");
 
 // instantiate the contract from the JSON - create instance
+var powerContract;
 
 function instantiateContract() {
     const powerContract = contract(PowerContract);
@@ -32,6 +33,18 @@ function instantiateContract() {
     })
 }
 
-instantiateContract();
+function setValue(value) {
+  powerContract.deployed().then(instance => {
+    instance.setValue(value, {from: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"}).then(result => {
+      console.log("Value was set to ", result);
+    })
+  }).catch(console.log("setValue err"));
+}
 
-console.log("Now attempting to update the value");
+// instance.setValue(5).then(function(result) {
+//   // result object contains import information about the transaction
+//   console.log("Value was set to", result.logs[0].args.val);
+// });
+
+instantiateContract();
+setValue(5);
