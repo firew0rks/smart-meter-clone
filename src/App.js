@@ -41,5 +41,13 @@ function setValue(value) {
 //   console.log("Value was set to", result.logs[0].args.val);
 // });
 
+// Function that is meant to run on interval
+// https://www.w3schools.com/jsref/met_win_setinterval.asp
+setInterval(function(){ console.log("Hello"); }, 3000);
+
 instantiateContract();
-setValue(5);
+//setValue(5);
+
+// while(true){
+//   // do nothing for a while
+// }
