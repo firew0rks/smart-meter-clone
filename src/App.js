@@ -23,8 +23,9 @@ function instantiateContract() {
 
 // promise the deployed contract and use its info
     powerContract.deployed().then(instance => {
-        instance.getValue.call().then(value => {
+        instance.Balance.call("0xf17f52151EbEF6C7334FAD080c5704D77216b732").then(value => {
           console.log(value.toString());
+          //console.log(web3.toWei(value))
         })
     }).catch(err => {
       console.log(err);
