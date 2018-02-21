@@ -32,7 +32,7 @@ var consumerAddress = "0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1";
 var prosumerAddress = "0xffcf8fdee72ac11b5c542428b35eef5769c409f0";
 
 // variables for the production and consumption states and rates
-var consuming;
+var consuming = 0;
 
 // Always called
 function instantiateContract() {
@@ -82,23 +82,14 @@ function unexportOnClose() { //function to run when exiting program
 // and instigating appropriate processes
 function doShit() {
   // if we are consuming, instigate the buy order
+  consuming = light.readSync();
+  console.log('LETTER', consuming)
   if (consuming) {
     sendMoney();
   }
 }
 
-
 instantiateContract();
-
-//Watch for hardware interrupts on pushButton GPIO, specify callback function
-light.watch(function (err, value) {
-  if (err) { //if an error
-    console.error('There was an error', err); //output error message to console
-  return;
-  }
-  consuming = value;
-  //console.log("pin value is ", value);
-});
 
 // set our interval to run and call the functions
 setInterval(() => doShit(), 3000);
