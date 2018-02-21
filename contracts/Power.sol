@@ -59,22 +59,26 @@ contract Power {
     }
 
     // Function: Transfers tokens from consumer to prosumer if the consumer has enough tokens. Transfer energy to prosumer.
-    function token_transfer(address consumer, address prosumer) payable public {
+    function token_transfer(address consumer, address prosumer, uint rate) payable public {
       uint cost = current_rate * user_list[prosumer].production_rate;
 
       // checks if there's enough tokens in wallet, and checks that producer is producing enough energy
-      if ((cost < user_list[consumer].token_balance)) {
+      if ((cost < user_list[consumer].token_balance) && (user_list[prosumer].production_rate > 0)) {
         user_list[prosumer].token_balance += cost;
         user_list[consumer].token_balance -= cost;
 
         // Updating the consumption rate of the consumer and the production rate of the prosumer, assuming that the consumer consumes ALL of the energy produced
-        user_list[consumer].consumption_rate += user_list[prosumer].production_rate;
+        // user_list[consumer].consumption_rate += user_list[prosumer].production_rate;
 
-        user_list[consumer].current_usage += energy_current_usage;
+        user_list[consumer].current_usage = rate;
 
         user_list[consumer].get_amount_spent_this_month += dollar_spent_usage;
         user_list[consumer].get_amount_saved_this_month += dollar_saved_usage;
       }
+    }
+
+    function change_rate() public {
+      user_list[msg.sender].consumption_rate = 0;
     }
 
     function get_user_information() public view returns (uint, uint, uint, uint, uint, uint) {

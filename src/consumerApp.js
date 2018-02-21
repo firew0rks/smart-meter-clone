@@ -41,10 +41,15 @@ function instantiateContract() {
 }
 
 // Called by consumer
-function sendMoney() {
+function sendMoney(rate, isRate) {
   powerContract.deployed().then(instance => {
       console.log('Sending money');
-      instance.token_transfer(consumerAddress, prosumerAddress, {from: consumerAddress, gas: 900000})
+      if(isRate) {
+        instance.token_transfer(consumerAddress, prosumerAddress, rate, {from: consumerAddress, gas: 900000});
+      } else {
+        instance.change_rate({from: consumerAddress});
+      }
+      
     })
 }
 
@@ -88,7 +93,9 @@ function doShit() {
   consuming = light.readSync();
   console.log('LETTER', consuming)
   if (consuming) {
-    sendMoney();
+    sendMoney(1800, true);
+  } else {
+    sendMoney(0, false)
   }
 }
 

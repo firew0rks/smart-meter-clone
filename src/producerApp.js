@@ -55,7 +55,7 @@ function sendPower() {
     console.log('sending power start')
     powerContract.deployed().then(instance => {
         console.log('sending Power');
-        instance.set_prosumer(prosumerAddress, 1000, {from: consumerAddress}).then((x) => {
+        instance.set_prosumer(prosumerAddress, 3800, {from: consumerAddress}).then((x) => {
             instance.get_energy_produced.call(prosumerAddress).then((result) => {
                 console.log('result!', result.toString())
             })
