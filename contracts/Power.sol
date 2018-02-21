@@ -26,7 +26,7 @@ contract Power{
       base_rate = 16; //cents/kwh, originally 15.86. However, Solidity does not let you have decimal points.
       peak_rate = 58; //cents/kwh, originally 58.33 " " "
       current_rate = base_rate;
-      energy_generated = 0;
+    //energy_generated = 0;
       consumer_addr = msg.sender; // we are the consumer
       consumer_list[consumer_addr].token_balance = msg.sender.balance;
     }
@@ -51,14 +51,9 @@ contract Power{
     }
 
     // add the get for the energy produced
-
-
-    /* // Function: Decrease amount of energy a consumer has as they use up energy. Return amount of electricity left.
-    function check_energy_left(address prosumer_addr, uint energy_used) public returns(uint) {
-        prosumer_list[prosumer_addr].energy_produced -= energy_used;
-
-        return prosumer_list[prosumer_addr].energy_produced ;
-    } */
+    function get_energy_produced(uint energy_produced) constant returns(uint){
+      return energy_produced;
+    }
 
     // Set prosumer address
     function set_prosumer(address prosumer_addr, uint energy_generated) public returns (address){
