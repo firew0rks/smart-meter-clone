@@ -23,6 +23,7 @@ contract Power{
     uint baserate;
     uint peakrate;
 
+    // CONSTRUCTOR
     function Power() public {
       baserate = 15; //15 cent on base/watt
       peakrate = 50; //50 cent on peak/watt
