@@ -1,16 +1,13 @@
 pragma solidity ^0.4.18;
 
-contract Power{
-
+contract Power {
     //uint energy_generated = 100; //(watts) hard coded amount of electricity generated
     uint base_rate;
     uint peak_rate;
     uint current_rate;
-    uint energy_threshold = 10; // energy prodcued over 10 watts/hr generated --> sell energy
     address consumer_addr;
-    
 
-    struct User{
+    struct User {
       uint token_balance;
       uint production_rate;
       uint consumption_rate;
@@ -28,12 +25,10 @@ contract Power{
       user_list[consumer_addr].token_balance = msg.sender.balance;
     }
 
-
     function set_rate (uint time) public {
-      if((time >= 14) || (time < 20)){
+      if (time >= 14 || time < 20) {
         current_rate = peak_rate;
-      }
-      else{
+      } else {
         current_rate = base_rate;
       }
     }
@@ -43,18 +38,17 @@ contract Power{
     }
 
     // Set prosumer address
-    function set_prosumer(address prosumer_addr, uint energy_generated) public{
+    function set_prosumer(address prosumer_addr, uint energy_generated) public {
       user_list[prosumer_addr].token_balance = prosumer_addr.balance;
       user_list[prosumer_addr].production_rate = energy_generated;
     }
 
-
     // Function: Transfers tokens from consumer to prosumer if the consumer has enough tokens. Transfer energy to prosumer.
-    function token_transfer(address consumer, address prosumer_addr) public{
-      uint cost = current_rate * ((user_list[prosumer_addr].production_rate)-energy_threshold);
+    function token_transfer(address consumer, address prosumer_addr) public {
+      uint cost = current_rate * user_list[prosumer_addr].production_rate;
 
-        // checks if there's enough tokens in wallet, and checks that producer is producing enough energy
-      if ((cost < consumer.balance) && (user_list[prosumer_addr].production_rate > energy_threshold)){
+      // checks if there's enough tokens in wallet, and checks that producer is producing enough energy
+      if ((cost < consumer.balance) && (user_list[prosumer_addr].production_rate > 0)) { 
         prosumer_addr.send(cost);
 
         // Updating the consumption rate of the consumer and the production rate of the prosumer, assuming that the consumer consumes ALL of the energy produced
@@ -67,6 +61,4 @@ contract Power{
     function get_energy_produced(address prosumer_addr) public view returns(uint) {
       return user_list[prosumer_addr].production_rate;
     }
-
-
 }
