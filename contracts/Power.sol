@@ -54,7 +54,7 @@ contract Power {
 
     // Set prosumer address
     function set_prosumer(address prosumer, uint energy_generated) public {
-      user_list[prosumer].production_rate = energy_generated;
+      user_list[prosumer].production_rate += energy_generated;
       user_list[prosumer].consumption_rate = 0;
     }
 
