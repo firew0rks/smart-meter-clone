@@ -28,8 +28,8 @@ var web3 = new Web3();
 // var consumerAddress = "0x627306090abaB3A6e1400e9345bC60c78a8BEf57";
 // var prosumerAddress = "0xf17f52151EbEF6C7334FAD080c5704D77216b732";
 // AWS ganache
-var consumerAddress = "0x2621f5977744ecd8f08e946f67b0a04dd47d99b0";
-var prosumerAddress = "0xf718d02a8b2937db3fce8e006019a6748677ae5e";
+var consumerAddress = "0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1";
+var prosumerAddress = "0xffcf8fdee72ac11b5c542428b35eef5769c409f0";
 
 // variables for the production and consumption states and rates
 var consuming;
