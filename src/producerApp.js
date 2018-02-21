@@ -11,16 +11,24 @@ const Web3 = require("web3");
 const contract = require("truffle-contract");
 //import PowerContract from '../build/contracts/Power.json';
 const PowerContract = require("../build/contracts/Power.json");
+//include onoff to interact with the GPIO
+var Gpio = require('onoff').Gpio;
+
+//use GPIO pin 17 as input, and 'both' button presses, and releases should be handled
+var solar = new Gpio(17, 'in', 'both');
 
 // web3 instance using the ganache testnet as the provider
-var provider = new Web3.providers.HttpProvider("http://127.0.0.1:8545");
+var provider = new Web3.providers.HttpProvider("http://127.0.0.1:7545");
 
 // instantiate the contract from the JSON - create instance
 var powerContract;
 var web3 = new Web3();
 
-var consumerAddress = "0x6d6ea3fea772a4ec900507a99c24c84cb37e0518";
-var prosumerAddress = "0x0d42c898dc8e73842d96ecb62272a74cf1689345";
+var consumerAddress = "0x627306090abaB3A6e1400e9345bC60c78a8BEf57";
+var prosumerAddress = "0xf17f52151EbEF6C7334FAD080c5704D77216b732";
+
+// variables for the production and consumption states and rates
+var producing;
 
 // Always called
 function instantiateContract() {
@@ -60,11 +68,41 @@ function getInformation(address) {
     });
 }
 
+function unexportOnClose() { //function to run when exiting program
+  //LED.writeSync(0); // Turn LED off
+  //LED.unexport(); // Unexport LED GPIO to free resources
+  solar.unexport(); // Unexport Button GPIO to free resources
+};
+
+// define function to run each time, checking the production/consumption_rate
+// and instigating appropriate processes
+function doShit() {
+  // if we are consuming, instigate the buy order
+  if (producing) {
+    sendPower();
+  }
+}
+
+
 instantiateContract();
 
-setInterval(() => sendMoney(), 4000);
-setInterval(() => sendPower(), 3000);
-setInterval(() => getInformation(consumerAddress), 5000);
-setInterval(() => getInformation(prosumerAddress), 5000);
+//Watch for hardware interrupts on pushButton GPIO, specify callback function
+solar.watch(function (err, value) {
+  if (err) { //if an error
+    console.error('There was an error', err); //output error message to console
+  return;
+  }
+  producing = value;
+  //console.log("pin value is ", value);
+});
 
+// set our interval to run and call the functions
+setInterval(() => doShit(), 3000);
 
+//function to run when user closes using ctrl+c
+process.on('SIGINT', unexportOnClose);
+
+// setInterval(() => sendMoney(), 4000);
+// setInterval(() => sendPower(), 3000);
+// setInterval(() => getInformation(consumerAddress), 5000);
+// setInterval(() => getInformation(prosumerAddress), 5000);
