@@ -18,7 +18,7 @@ var Gpio = require('onoff').Gpio;
 var light = new Gpio(17, 'in', 'both');
 
 // web3 instance using the ganache testnet as the provider
-var provider = new Web3.providers.HttpProvider("http://127.0.0.1:7545");
+var provider = new Web3.providers.HttpProvider("http://54.206.58.77:8545");
 
 // instantiate the contract from the JSON - create instance
 var powerContract;
