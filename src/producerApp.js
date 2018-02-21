@@ -24,6 +24,10 @@ var provider = new Web3.providers.HttpProvider("http://54.206.58.77:8545");
 var powerContract;
 var web3 = new Web3();
 
+// local ganache
+// var consumerAddress = "0x627306090abaB3A6e1400e9345bC60c78a8BEf57";
+// var prosumerAddress = "0xf17f52151EbEF6C7334FAD080c5704D77216b732";
+// AWS ganache
 var consumerAddress = "0x2621f5977744ecd8f08e946f67b0a04dd47d99b0";
 var prosumerAddress = "0xf718d02a8b2937db3fce8e006019a6748677ae5e";
 
