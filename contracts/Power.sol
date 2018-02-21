@@ -6,11 +6,19 @@ contract Power {
     uint peak_rate;
     uint current_rate;
     address consumer_addr;
+    uint efficiency;
+    uint energy_current_usage;
+    uint energy_saved_usage;
+    uint dollar_saved_usage;
+    uint dollar_spent_usage;
 
     struct User {
       uint token_balance;
       uint production_rate;
       uint consumption_rate;
+      uint current_usage;
+      uint get_amount_spent_this_month;
+      uint get_amount_saved_this_month;
     }
 
     mapping(address => User) user_list;
@@ -18,8 +26,13 @@ contract Power {
     //  HARD CODED CONSUMER AND prosumerS - perhaps what we could do, is find all the people who are producing excess energy, (check if they want to sell) and exchange it with people who are not producing excess energ
     // ADD EXTRA VARIABLE FOR o GENERATED
     function Power(address prosumer) public {
-      base_rate = 1; //16 cents/kwh, originally 15.86. However, Solidity does not let you have decimal points.
+      base_rate = 1; //cents/kwh, originally 15.86. However, Solidity does not let you have decimal points.
       peak_rate = 2; //cents/kwh, originally 58.33 " " "
+      efficiency = 29;
+      energy_saved_usage = 10;
+      energy_current_usage = 27;
+      dollar_saved_usage = 1;
+      dollar_spent_usage = 9;
       current_rate = base_rate;
       consumer_addr = msg.sender; // we are the consumer
       user_list[consumer_addr].token_balance = 100000;
@@ -56,6 +69,11 @@ contract Power {
 
         // Updating the consumption rate of the consumer and the production rate of the prosumer, assuming that the consumer consumes ALL of the energy produced
         user_list[consumer].consumption_rate += user_list[prosumer].production_rate;
+
+        user_list[consumer].current_usage += energy_current_usage;
+
+        user_list[consumer].get_amount_spent_this_month += dollar_spent_usage;
+        user_list[consumer].get_amount_saved_this_month += dollar_saved_usage;
       }
     }
 
@@ -64,7 +82,20 @@ contract Power {
       return user_list[prosumer].production_rate;
     }
 
-    function get_user_information() public view returns (uint, uint, uint) {
-      return (user_list[msg.sender].token_balance, user_list[msg.sender].production_rate, user_list[msg.sender].consumption_rate);
+    function getProduction() public view returns(uint){
+      return (user_list[msg.sender].production_rate);
     }
+
+    function getCurrent_usage() public view returns(uint){
+      return (user_list[msg.sender].current_usage);
+    }
+
+    function getAmount_spent_this_month() public view returns(uint){
+      return (user_list[msg.sender].get_amount_spent_this_month);
+    }
+
+    function getAmount_saved_this_month() public view returns(uint){
+      return (user_list[msg.sender].get_amount_saved_this_month);
+    }
+
 }
