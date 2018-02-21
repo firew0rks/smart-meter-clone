@@ -13,14 +13,14 @@ const contract = require("truffle-contract");
 const PowerContract = require("../build/contracts/Power.json");
 
 // web3 instance using the ganache testnet as the provider
-var provider = new Web3.providers.HttpProvider("http://127.0.0.1:8545");
+var provider = new Web3.providers.HttpProvider("http://127.0.0.1:7545");
 
 // instantiate the contract from the JSON - create instance
 var powerContract;
 var web3 = new Web3();
 
-var consumerAddress = "0x6d6ea3fea772a4ec900507a99c24c84cb37e0518";
-var prosumerAddress = "0x0d42c898dc8e73842d96ecb62272a74cf1689345";
+var consumerAddress = "0x627306090abaB3A6e1400e9345bC60c78a8BEf57";
+var prosumerAddress = "0xf17f52151EbEF6C7334FAD080c5704D77216b732";
 
 // Always called
 function instantiateContract() {
@@ -53,7 +53,7 @@ function getInformation(address) {
     powerContract.deployed().then(instance => {
         instance.get_user_information({from: address}).then(result => {
             console.log(address);
-            console.log('Token balance: ', web3.fromWei(result[0], 'ether').toString());
+            console.log('Token balance: ', result[0].toString());
             console.log('Production rate: ', result[1].toString());
             console.log('Consumption rate: ', result[2].toString());
         })
@@ -62,9 +62,7 @@ function getInformation(address) {
 
 instantiateContract();
 
-setInterval(() => sendMoney(), 4000);
+setInterval(() => sendMoney(), 3000);
 setInterval(() => sendPower(), 3000);
-setInterval(() => getInformation(consumerAddress), 5000);
-setInterval(() => getInformation(prosumerAddress), 5000);
-
-
+setInterval(() => getInformation(consumerAddress), 3000);
+setInterval(() => getInformation(prosumerAddress), 3000);

@@ -17,12 +17,14 @@ contract Power {
 
     //  HARD CODED CONSUMER AND prosumerS - perhaps what we could do, is find all the people who are producing excess energy, (check if they want to sell) and exchange it with people who are not producing excess energ
     // ADD EXTRA VARIABLE FOR o GENERATED
-    function Power() public {
-      base_rate = 16; //cents/kwh, originally 15.86. However, Solidity does not let you have decimal points.
-      peak_rate = 58; //cents/kwh, originally 58.33 " " "
+    function Power(address prosumer) public {
+      base_rate = 1; //16 cents/kwh, originally 15.86. However, Solidity does not let you have decimal points.
+      peak_rate = 2; //cents/kwh, originally 58.33 " " "
       current_rate = base_rate;
       consumer_addr = msg.sender; // we are the consumer
-      user_list[consumer_addr].token_balance = msg.sender.balance;
+      user_list[consumer_addr].token_balance = 100000;
+      user_list[prosumer].token_balance = 0;
+
     }
 
     function set_rate (uint time) public {
@@ -38,28 +40,28 @@ contract Power {
     }
 
     // Set prosumer address
-    function set_prosumer(address prosumer_addr, uint energy_generated) public {
-      user_list[prosumer_addr].token_balance = prosumer_addr.balance;
-      user_list[prosumer_addr].production_rate = energy_generated;
+    function set_prosumer(address prosumer, uint energy_generated) public {
+      user_list[prosumer].production_rate = energy_generated;
+      user_list[prosumer].consumption_rate = 0;
     }
 
     // Function: Transfers tokens from consumer to prosumer if the consumer has enough tokens. Transfer energy to prosumer.
-    function token_transfer(address consumer, address prosumer_addr) public {
-      uint cost = current_rate * user_list[prosumer_addr].production_rate;
+    function token_transfer(address consumer, address prosumer) payable public {
+      uint cost = current_rate * user_list[prosumer].production_rate;
 
       // checks if there's enough tokens in wallet, and checks that producer is producing enough energy
-      if ((cost < consumer.balance) && (user_list[prosumer_addr].production_rate > 0)) { 
-        prosumer_addr.transfer(cost);
+      if ((cost < user_list[consumer].token_balance)) {
+        user_list[prosumer].token_balance += cost;
+        user_list[consumer].token_balance -= cost;
 
         // Updating the consumption rate of the consumer and the production rate of the prosumer, assuming that the consumer consumes ALL of the energy produced
-        user_list[consumer].consumption_rate += user_list[prosumer_addr].production_rate;
-        user_list[prosumer_addr].production_rate = 0;
+        user_list[consumer].consumption_rate += user_list[prosumer].production_rate;
       }
     }
 
     // Function: Return energy production rate of prosumer
-    function get_energy_produced(address prosumer_addr) public view returns(uint) {
-      return user_list[prosumer_addr].production_rate;
+    function get_energy_produced(address prosumer) public view returns(uint) {
+      return user_list[prosumer].production_rate;
     }
 
     function get_user_information() public view returns (uint, uint, uint) {
