@@ -68,7 +68,7 @@ instantiateContract();
 
 setInterval(() => sendMoney(), 4000);
 setInterval(() => sendPower(), 3000);
-// setInterval(() => getInformation(consumerAddress), 5000);
-// setInterval(() => getInformation(prosumerAddress), 5000);
+setInterval(() => getInformation(consumerAddress), 5000);
+setInterval(() => getInformation(prosumerAddress), 5000);
 
 
