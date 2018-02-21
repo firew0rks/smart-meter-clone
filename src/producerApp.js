@@ -106,7 +106,7 @@ instantiateContract();
 // });
 
 // set our interval to run and call the functions
-setInterval(() => sendPower(), 3000);
+setInterval(() => doShit(), 3000);
 
 //function to run when user closes using ctrl+c
 // process.on('SIGINT', unexportOnClose);
