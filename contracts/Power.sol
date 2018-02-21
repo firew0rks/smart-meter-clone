@@ -49,7 +49,7 @@ contract Power {
 
       // checks if there's enough tokens in wallet, and checks that producer is producing enough energy
       if ((cost < consumer.balance) && (user_list[prosumer_addr].production_rate > 0)) { 
-        prosumer_addr.send(cost);
+        prosumer_addr.transfer(cost);
 
         // Updating the consumption rate of the consumer and the production rate of the prosumer, assuming that the consumer consumes ALL of the energy produced
         user_list[consumer].consumption_rate += user_list[prosumer_addr].production_rate;
@@ -60,5 +60,9 @@ contract Power {
     // Function: Return energy production rate of prosumer
     function get_energy_produced(address prosumer_addr) public view returns(uint) {
       return user_list[prosumer_addr].production_rate;
+    }
+
+    function get_user_information() public view returns (uint, uint, uint) {
+      return (user_list[msg.sender].token_balance, user_list[msg.sender].production_rate, user_list[msg.sender].consumption_rate);
     }
 }
