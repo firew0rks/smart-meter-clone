@@ -45,7 +45,7 @@ contract Power{
 
     // Function: set energy produced by the prosumer
     function set_energy_produced(address prosumer_address, uint energy_produced) public returns(uint) {
-      prosumer_list[prosumer_address].energy_balance += energy_produced;
+      prosumer_list[prosumer_address].energy_balance = energy_produced;
     }
 
 
