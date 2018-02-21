@@ -22,15 +22,10 @@ var web3 = new Web3();
 var consumerAddress = "0x6d6ea3fea772a4ec900507a99c24c84cb37e0518";
 var prosumerAddress = "0x0d42c898dc8e73842d96ecb62272a74cf1689345";
 
+// Always called
 function instantiateContract() {
     powerContract = contract(PowerContract);
     powerContract.setProvider(provider);
-    
-    // Setting prosumer address
-    powerContract.deployed().then(instance => {
-        console.log("here");
-        instance.set_prosumer(prosumerAddress, 1000, {from: consumerAddress})
-    });
 }
 
 // Called by consumer
@@ -53,6 +48,7 @@ function sendPower() {
     })
 }
 
+// Debug only
 function getInformation(address) {
     powerContract.deployed().then(instance => {
         instance.get_user_information({from: address}).then(result => {
