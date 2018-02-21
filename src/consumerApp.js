@@ -61,7 +61,7 @@ function getInformation(address) {
     powerContract.deployed().then(instance => {
         instance.get_user_information({from: address}).then(result => {
             console.log(address);
-            console.log('Token balance: ', web3.fromWei(result[0], 'ether').toString());
+            console.log('Token balance: ', result[0].toString());
             console.log('Production rate: ', result[1].toString());
             console.log('Consumption rate: ', result[2].toString());
         })
