@@ -68,6 +68,9 @@ function getInformation(address) {
             console.log('Token balance: ', result[0].toString());
             console.log('Production rate: ', result[1].toString());
             console.log('Consumption rate: ', result[2].toString());
+            console.log('Current Usage:  ', result[3].toString());
+            console.log('Amount spent this month: ', result[4].toString());
+            console.log('Amount saved this month: ', result[5].toString());
         })
     });
 }

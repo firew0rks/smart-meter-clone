@@ -77,6 +77,10 @@ contract Power {
       }
     }
 
+    function get_user_information() public view returns (uint, uint, uint, uint, uint, uint) {
+      return (user_list[msg.sender].token_balance, user_list[msg.sender].production_rate, user_list[msg.sender].consumption_rate, user_list[msg.sender].current_usage, user_list[msg.sender].get_amount_spent_this_month, user_list[msg.sender].get_amount_saved_this_month);
+    }
+
     // Function: Return energy production rate of prosumer
     function get_energy_produced(address prosumer) public view returns(uint) {
       return user_list[prosumer].production_rate;
