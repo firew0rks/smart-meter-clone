@@ -32,7 +32,7 @@ var consumerAddress = "0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1";
 var prosumerAddress = "0xffcf8fdee72ac11b5c542428b35eef5769c409f0";
 
 // variables for the production and consumption states and rates
-var producing;
+var producing = 1;
 
 // Always called
 function instantiateContract() {
@@ -82,6 +82,7 @@ function unexportOnClose() { //function to run when exiting program
 // and instigating appropriate processes
 function doShit() {
   // if we are consuming, instigate the buy order
+  producing = solar.readSync();
   console.log('WORD', producing);
   if (producing == 1) {
     sendPower();
@@ -92,20 +93,20 @@ function doShit() {
 instantiateContract();
 
 //Watch for hardware interrupts on pushButton GPIO, specify callback function
-solar.watch(function (err, value) {
-  if (err) { //if an error
-    console.error('There was an error', err); //output error message to console
-  return;
-  }
-  producing = value;
-  console.log("pin value is ", value);
-});
+// solar.watch(function (err, value) {
+//   if (err) { //if an error
+//     console.error('There was an error', err); //output error message to console
+//   return;
+//   }
+//   producing = value;
+//   console.log("pin value is ", value);
+// });
 
 // set our interval to run and call the functions
 setInterval(() => doShit(), 3000);
 
 //function to run when user closes using ctrl+c
-process.on('SIGINT', unexportOnClose);
+// process.on('SIGINT', unexportOnClose);
 
 // setInterval(() => sendMoney(), 4000);
 // setInterval(() => sendPower(), 3000);
