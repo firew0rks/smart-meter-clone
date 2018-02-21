@@ -71,7 +71,7 @@ contract Power{
     }
 
     function set_rate (uint time){
-      if((time > 14) || (time < 20)){
+      if((time >= 14) || (time < 20)){
         current_rate = peak_rate;
       }
       else{
