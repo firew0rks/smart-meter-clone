@@ -8,6 +8,7 @@ contract Power{
     uint energy_threshold = 10; // energy prodcued over 10 watts/hr generated --> sell energy
     address consumer_addr;
     address prosumer_addr;
+    uint energy_generated;
 
     struct User{
       uint token_balance;
@@ -29,7 +30,7 @@ contract Power{
     }
 
     // Function: Transfers tokens from consumer to prosumer if the consumer has enough tokens. Transfer energy to prosumer.
-    function token_transfer(address consumer_addr, address prosumer_addr) public returns(bool){
+    /* function token_transfer(address consumer_addr, address prosumer_addr) public returns(bool){
       uint cost = baserate * (prosumer_list[prosumer_addr].(energy_balance)-energ;
 
         // checks if there's enough tokens in wallet, and checks that producer is producing enough energy
@@ -40,11 +41,11 @@ contract Power{
       } else {
         return false;
       }
-    }
+    } */
 
     // Function: set energy produced by the prosumer
-    function set_energy_produced(address prosumer_addr, uint energy_produced) public returns(uint) {
-      prosumer_list[prosumer_addr].energy_produced = energy_produced;
+    function set_energy_produced(address prosumer_address, uint energy_produced) public returns(uint) {
+      prosumer_list[prosumer_address].energy_balance += energy_produced;
     }
 
 
@@ -56,10 +57,10 @@ contract Power{
     } */
 
     // Set prosumer address
-    function set_prosumer(address prosumer_addr, uint energy_generated) public returns (address){
+    /* function set_prosumer(address prosumer_addr, uint energy_generated) public returns (address){
       prosumer_list[prosumer_addr].token_balance = prosumer_addr.balance();
       prosumer_list[prosumer_addr].energy_balance = energy_generated;
-    }
+    } */
     // Set rate charged (demand dependant)
 
 
