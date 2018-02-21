@@ -13,7 +13,7 @@ const contract = require("truffle-contract");
 const PowerContract = require("../build/contracts/Power.json");
 
 // web3 instance using the ganache testnet as the provider
-var provider = new Web3.providers.HttpProvider("http://127.0.0.1:7545");
+var provider = new Web3.providers.HttpProvider("http://127.0.0.1:8545");
 
 // instantiate the contract from the JSON - create instance
 var powerContract;
@@ -21,65 +21,28 @@ var powerContract;
 function instantiateContract() {
     powerContract = contract(PowerContract);
     powerContract.setProvider(provider);
-
-// promise the deployed contract and use its info
-    // powerContract.deployed().then(instance => {
-    //     instance.Balance.call("0xf17f52151EbEF6C7334FAD080c5704D77216b732").then(value => {
-    //       console.log(value.toString());
-    //       //console.log(web3.toWei(value))
-    //     })
-    // }).catch(err => {
-    //   console.log(err);
-    // })
+    
+    // Setting prosumer address
+    powerContract.deployed().then(instance => {
+        console.log("here");
+        instance.set_prosumer("0x4301a4689ce0bcd823c95f3f231c12b98eecd80d", 1000, {from: "0x4301a4689ce0bcd823c95f3f231c12b98eecd80d"})
+    });
 }
-
-
-// // Function to update the value via transaction
-// function setValue(value) {
-//   powerContract.deployed().then(instance => {
-//     instance.set_prosumer("0x627306090abaB3A6e1400e9345bC60c78a8BEf57", value, 
-//     {from: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"}).then(result => {console.log("Value was set to ", result);
-//     })
-//   }).then(instance => {instance.token_transfer("0xf17f52151EbEF6C7334FAD080c5704D77216b732", 
-//   "0x627306090abaB3A6e1400e9345bC60c78a8BEf57", {from: "0xf17f52151EbEF6C7334FAD080c5704D77216b732"})  
-
-// }).catch(console.log("token_transfer err"));
-// }
 
 // Function to update the value via transaction
-function setValue(value) {
-   //var contractInstance = instance;
-
+function sendMoney() {
   powerContract.deployed().then(instance => {
-    instance.set_prosumer("0x627306090abaB3A6e1400e9345bC60c78a8BEf57", value, 
-    {from: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"}).then(result => {console.log("Value was set to ", result);
-    }).then(function() {
-      instance.token_transfer("0xf17f52151EbEF6C7334FAD080c5704D77216b732", "0x627306090abaB3A6e1400e9345bC60c78a8BEf57", 
-      {from: "0xf17f52151EbEF6C7334FAD080c5704D77216b732", gas:90000})  
-  
-  })  
-}).catch(console.log("token_transfer err"));
+      instance.token_transfer("0x4301a4689ce0bcd823c95f3f231c12b98eecd80d", "0x2b4521451201790449cbab64aff6af3a7a91aa50", {from: "0x4301a4689ce0bcd823c95f3f231c12b98eecd80d"}).then((x) => {
+        console.log(x);
+        instance.get_energy_produced.call("0x4301a4689ce0bcd823c95f3f231c12b98eecd80d").then((result) => {
+            console.log('result!', result.toString())
+        })
+     })
+    })
 }
-
-// .then(function(instance) {
-//   instance.token_transfer("0xf17f52151EbEF6C7334FAD080c5704D77216b732", "0x627306090abaB3A6e1400e9345bC60c78a8BEf57", {from: "0xf17f52151EbEF6C7334FAD080c5704D77216b732"})  
-// }).catch(console.log("token_transfer err"));
-
-// instance.setValue(5).then(function(result) {
-//   // result object contains import information about the transaction
-//   console.log("Value was set to", result.logs[0].args.val);
-// });
-
-// Function that is meant to run on interval
-// https://www.w3schools.com/jsref/met_win_setinterval.asp
-//setInterval(function(){ console.log("Hello"); }, 3000);
 
 instantiateContract();
 
-//setValue(5);
-setInterval(function() {setValue(1000);}, 4000);
+setInterval(() => sendMoney(), 4000);
 
-// while(true){
-//   // do nothing for a while
-// }
 
