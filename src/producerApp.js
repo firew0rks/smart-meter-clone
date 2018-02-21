@@ -36,8 +36,10 @@ var producing = 1;
 
 // Always called
 function instantiateContract() {
+    console.log('Instantiating contract');
     powerContract = contract(PowerContract);
     powerContract.setProvider(provider);
+    console.log('Set provider');
 }
 
 // Called by consumer
@@ -50,6 +52,7 @@ function sendMoney() {
 
 // Called by prosumer
 function sendPower() {
+    console.log('sending power start')
     powerContract.deployed().then(instance => {
         console.log('sending Power');
         instance.set_prosumer(prosumerAddress, 1000, {from: consumerAddress}).then((x) => {
@@ -103,7 +106,7 @@ instantiateContract();
 // });
 
 // set our interval to run and call the functions
-setInterval(() => doShit(), 3000);
+setInterval(() => sendPower(), 3000);
 
 //function to run when user closes using ctrl+c
 // process.on('SIGINT', unexportOnClose);
