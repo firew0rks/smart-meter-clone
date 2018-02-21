@@ -33,14 +33,37 @@ function instantiateContract() {
     // })
 }
 
+
+// // Function to update the value via transaction
+// function setValue(value) {
+//   powerContract.deployed().then(instance => {
+//     instance.set_prosumer("0x627306090abaB3A6e1400e9345bC60c78a8BEf57", value, 
+//     {from: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"}).then(result => {console.log("Value was set to ", result);
+//     })
+//   }).then(instance => {instance.token_transfer("0xf17f52151EbEF6C7334FAD080c5704D77216b732", 
+//   "0x627306090abaB3A6e1400e9345bC60c78a8BEf57", {from: "0xf17f52151EbEF6C7334FAD080c5704D77216b732"})  
+
+// }).catch(console.log("token_transfer err"));
+// }
+
 // Function to update the value via transaction
 function setValue(value) {
+   //var contractInstance = instance;
+
   powerContract.deployed().then(instance => {
-    instance.set_energy_produced("0x627306090abaB3A6e1400e9345bC60c78a8BEf57", value, {from: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"}).then(result => {
-      console.log("Value was set to ", result);
-    })
-  }).catch(console.log("set_energy_produced err"));
+    instance.set_prosumer("0x627306090abaB3A6e1400e9345bC60c78a8BEf57", value, 
+    {from: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"}).then(result => {console.log("Value was set to ", result);
+    }).then(function() {
+      instance.token_transfer("0xf17f52151EbEF6C7334FAD080c5704D77216b732", "0x627306090abaB3A6e1400e9345bC60c78a8BEf57", 
+      {from: "0xf17f52151EbEF6C7334FAD080c5704D77216b732", gas:90000})  
+  
+  })  
+}).catch(console.log("token_transfer err"));
 }
+
+// .then(function(instance) {
+//   instance.token_transfer("0xf17f52151EbEF6C7334FAD080c5704D77216b732", "0x627306090abaB3A6e1400e9345bC60c78a8BEf57", {from: "0xf17f52151EbEF6C7334FAD080c5704D77216b732"})  
+// }).catch(console.log("token_transfer err"));
 
 // instance.setValue(5).then(function(result) {
 //   // result object contains import information about the transaction
@@ -52,9 +75,11 @@ function setValue(value) {
 //setInterval(function(){ console.log("Hello"); }, 3000);
 
 instantiateContract();
+
 //setValue(5);
-setInterval(function() {setValue(100);}, 3000);
+setInterval(function() {setValue(1000);}, 4000);
 
 // while(true){
 //   // do nothing for a while
 // }
+
