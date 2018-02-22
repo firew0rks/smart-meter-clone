@@ -35,7 +35,7 @@ contract Power {
       dollar_spent_usage = 9;
       current_rate = base_rate;
       consumer_addr = msg.sender; // we are the consumer
-      user_list[consumer_addr].token_balance = 100000;
+      user_list[consumer_addr].token_balance = 1000000;
       user_list[prosumer].token_balance = 0;
 
     }
@@ -54,7 +54,7 @@ contract Power {
 
     // Set prosumer address
     function set_prosumer(address prosumer, uint energy_generated) public {
-      user_list[prosumer].production_rate += energy_generated;
+      user_list[prosumer].production_rate = energy_generated;
       user_list[prosumer].consumption_rate = 0;
     }
 
@@ -70,7 +70,7 @@ contract Power {
         // Updating the consumption rate of the consumer and the production rate of the prosumer, assuming that the consumer consumes ALL of the energy produced
         user_list[consumer].consumption_rate += user_list[prosumer].production_rate;
 
-        user_list[consumer].current_usage += energy_current_usage;
+        user_list[consumer].current_usage = energy_current_usage;
 
         user_list[consumer].get_amount_spent_this_month += dollar_spent_usage;
         user_list[consumer].get_amount_saved_this_month += dollar_saved_usage;
@@ -86,20 +86,24 @@ contract Power {
       return user_list[prosumer].production_rate;
     }
 
-    function getProduction() public view returns(uint){
+    function getProduction() public view returns(uint) {
       return (user_list[msg.sender].production_rate);
     }
 
-    function getCurrent_usage() public view returns(uint){
+    function getCurrent_usage() public view returns(uint) {
       return (user_list[msg.sender].current_usage);
     }
 
-    function getAmount_spent_this_month() public view returns(uint){
+    function getAmount_spent_this_month() public view returns(uint) {
       return (user_list[msg.sender].get_amount_spent_this_month);
     }
 
-    function getAmount_saved_this_month() public view returns(uint){
+    function getAmount_saved_this_month() public view returns(uint) {
       return (user_list[msg.sender].get_amount_saved_this_month);
+    }
+
+    function get_current_balance() public view returns (uint) {
+      return user_list[msg.sender].token_balance;
     }
 
 }
